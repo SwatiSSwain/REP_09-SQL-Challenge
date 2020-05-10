@@ -1,0 +1,110 @@
+﻿--Drop Table if exists and then Create Table
+--Add Primary key and unique key contraints on table creation
+
+--DEPARTMENT
+DROP TABLE IF EXISTS DEPARTMENT CASCADE;
+CREATE TABLE DEPARTMENT (
+    id SERIAL   NOT NULL,
+    dept_no VARCHAR(10)   NOT NULL,
+    dept_name VARCHAR(50)   NOT NULL,
+    CONSTRAINT pk_DEPARTMENT PRIMARY KEY (
+        id
+     ),
+    CONSTRAINT uc_DEPARTMENT_dept_no UNIQUE (
+        dept_no
+    )
+);
+
+--CREATE EMPLOYEE TITLE 
+DROP TABLE IF EXISTS TITLE CASCADE;
+CREATE TABLE TITLE (
+    id SERIAL   NOT NULL,
+    title_id VARCHAR(10)   NOT NULL,
+    title VARCHAR(50)   NOT NULL,
+    CONSTRAINT pk_TITLE PRIMARY KEY (
+        id
+     ),
+    CONSTRAINT uc_TITLE_title_id UNIQUE (
+        title_id
+    )
+);
+
+--CREATE EMPLOYEE
+DROP TABLE IF EXISTS EMPLOYEE CASCADE;
+CREATE TABLE EMPLOYEE (
+    id SERIAL   NOT NULL,
+    emp_no INT   NOT NULL,
+    emp_title_id VARCHAR(20)   NOT NULL,
+    birth_date DATE  NOT NULL,
+    first_name VARCHAR(100)   NOT NULL,
+    last_name VARCHAR(100)   NOT NULL,
+    sex CHAR(1)  NOT NULL,
+    hire_date DATE  NOT NULL,
+    CONSTRAINT pk_EMPLOYEE PRIMARY KEY (
+        id
+     ),
+    CONSTRAINT uc_EMPLOYEE_emp_no UNIQUE (
+        emp_no
+    )
+);
+
+--CREATE DEPT_EMP
+DROP TABLE IF EXISTS DEPT_EMP;
+CREATE TABLE DEPT_EMP (
+    id SERIAL   NOT NULL,
+    emp_no INT   NOT NULL,
+    dept_no VARCHAR(10)   NOT NULL,
+    CONSTRAINT pk_DEPT_EMP PRIMARY KEY (
+        id
+     ),
+    CONSTRAINT uc_DEPT_EMP_dept_no UNIQUE (
+        emp_no,dept_no
+    )
+);
+
+--CREATE DEPT_MANAGER
+DROP TABLE IF EXISTS DEPT_MANAGER;
+CREATE TABLE DEPT_MANAGER (
+    id SERIAL   NOT NULL,
+    dept_no VARCHAR(10)   NOT NULL,
+    emp_no INT   NOT NULL,
+    CONSTRAINT pk_DEPT_MANAGER PRIMARY KEY (
+        id
+     ),
+    CONSTRAINT uc_DEPT_MANAGER_emp_no UNIQUE (
+        dept_no, emp_no
+    )
+);
+
+--CREATE SALARY
+DROP TABLE IF EXISTS SALARY;
+CREATE TABLE SALARY (
+    id SERIAL   NOT NULL,
+    emp_no INT   NOT NULL,
+    salary INT   NOT NULL,
+    CONSTRAINT pk_SALARY PRIMARY KEY (
+        id
+     ),
+    CONSTRAINT uc_SALARY_emp_no UNIQUE (
+        emp_no
+    )
+);
+
+--Adding Foreign Keys to all tables
+ALTER TABLE EMPLOYEE ADD CONSTRAINT fk_EMPLOYEE_emp_title_id FOREIGN KEY(emp_title_id)
+REFERENCES TITLE (title_id);
+
+ALTER TABLE DEPT_EMP ADD CONSTRAINT fk_DEPT_EMP_emp_no FOREIGN KEY(emp_no)
+REFERENCES EMPLOYEE (emp_no);
+
+ALTER TABLE DEPT_EMP ADD CONSTRAINT fk_DEPT_EMP_dept_no FOREIGN KEY(dept_no)
+REFERENCES DEPARTMENT (dept_no);
+
+ALTER TABLE DEPT_MANAGER ADD CONSTRAINT fk_DEPT_MANAGER_dept_no FOREIGN KEY(dept_no)
+REFERENCES DEPARTMENT (dept_no);
+
+ALTER TABLE DEPT_MANAGER ADD CONSTRAINT fk_DEPT_MANAGER_emp_no FOREIGN KEY(emp_no)
+REFERENCES EMPLOYEE (emp_no);
+
+ALTER TABLE SALARY ADD CONSTRAINT fk_SALARY_emp_no FOREIGN KEY(emp_no)
+REFERENCES EMPLOYEE (emp_no);

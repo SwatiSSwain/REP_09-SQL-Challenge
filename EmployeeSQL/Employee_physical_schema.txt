@@ -1,0 +1,41 @@
+DEPARTMENT
+-
+id SERIAL PK  
+dept_no VARCHAR(10) UNIQUE
+dept_name VARCHAR(50)
+
+TITLE
+-
+id SERIAL PK
+title_id VARCHAR(10) UNIQUE
+title VARCHAR(50)
+
+EMPLOYEE
+-
+id SERIAL PK
+emp_no INT UNIQUE
+emp_title_id VARCHAR(20) FK >- TITLE.title_id
+birth_date DATE
+first_name VARCHAR(100)
+last_name VARCHAR(100)
+sex CHAR(1)
+hire_date DATE
+
+
+DEPT_EMP
+-
+id SERIAL PK
+emp_no INT UNIQUE FK >- EMPLOYEE.emp_no
+dept_no VARCHAR(10) UNIQUE FK - DEPARTMENT.dept_no
+
+DEPT_MANAGER
+-
+id SERIAL PK
+dept_no VARCHAR(10) UNIQUE FK - DEPARTMENT.dept_no
+emp_no INT UNIQUE FK - EMPLOYEE.emp_no
+
+SALARY
+-
+id SERIAL PK
+emp_no INT UNIQUE FK - EMPLOYEE.emp_no
+salary INT
